@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyCamp: Курс Python в одном файле</title>
+    <style>
+        :root {
+            --primary: #0066cc;
+            --bg: #f4f4f4;
+            --text: #333;
+            --code-bg: #282c34;
+            --code-text: #abb2bf;
+        }
+        * { box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            margin: 0; 
+            background: var(--bg); 
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+        }
+        #sidebar {
+            width: 280px;
+            background: #fff;
+            border-right: 1px solid #ddd;
+            padding: 20px;
+            overflow-y: auto;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+        }
+        #sidebar h2 { margin-top: 0; font-size: 1.2rem; color: var(--primary); }
+        .module { margin-bottom: 20px; }
+        .module-title { font-weight: bold; cursor: pointer; user-select: none; margin-bottom: 5px; }
+        .lesson { 
+            padding: 5px 10px; 
+            margin: 2px 0; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-size: 0.9rem;
+        }
+        .lesson.active { background: var(--primary); color: #fff; }
+        #main-content {
+            flex-grow: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        #lesson-header { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        #editor-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        textarea, iframe {
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+        }
+        textarea {
+            padding: 15px;
+            background: var(--code-bg);
+            color: var(--code-text);
+            font-size: 14px;
+            height: 400px;
+            resize: vertical;
+        }
+        iframe {
+            height: 400px;
+            background: #fff;
+        }
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-right: 10px;
+        }
+        button:hover { background: #0055a3; }
+        pre { background: var(--code-bg); color: var(--code-text); padding: 15px; border-radius: 6px; overflow-x: auto; }
+        code { font-family: 'Courier New', monospace; }
+        .hidden { display: none; }
+        .breadcrumb { color: #666; font-size: 0.9rem; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+<div id="sidebar">
+    <h2>🐍 PyCamp: Полный курс Python</h2>
+    <div class="module">
+        <div class="module-title" onclick="toggleModule(0)">▸ Модуль 1: Основы синтаксиса</div>
+        <div class="lessons" id="lessons-0">
+            <div class="lesson active" data-id="0" onclick="loadLesson(0)">1.1 Привет, мир!</div>
+            <div class="lesson" data-id="1" onclick="loadLesson(1)">1.2 Переменные и типы данных</div>
+            <div class="lesson" data-id="2" onclick="loadLesson(2)">1.3 Условные операторы (if/else)</div>
+        </div>
+    </div>
+    <div class="module">
+        <div class="module-title" onclick="toggleModule(1)">▸ Модуль 2: Структуры данных</div>
+        <div class="lessons hidden" id="lessons-1">
+            <div class="lesson" data-id="3" onclick="loadLesson(3)">2.1 Списки (Lists)</div>
+            <div class="lesson" data-id="4" onclick="loadLesson(4)">2.2 Циклы (for/while)</div>
+        </div>
+    </div>
+    <div style="margin-top: 40px; font-size: 0.8rem; color: #888;">
+        <p>Логика выполнения кода работает через сервис <a href="https://jry.io" target="_blank">jry.io</a>.</p>
+    </div>
+</div>
+
+<div id="main-content">
+    <div id="lesson-header">
+        <div class="breadcrumb" id="breadcrumb">Модуль 1 > 1.1 Привет, мир!</div>
+        <h1 id="lesson-title">1.1 Привет, мир!</h1>
+        <p id="lesson-description">Напишем нашу первую программу. Функция print() выводит текст в консоль.</p>
+    </div>
+
+    <div id="task">
+        <strong>Задание:</strong> Измените код так, чтобы программа выводила ваше имя.
+    </div>
+
+    <div id="editor-container">
+        <div>
+            <strong>Редактор кода (Python):</strong>
+            <textarea id="code-editor">print("Привет, мир!")</textarea>
+        </div>
+        <div>
+            <strong>Результат выполнения:</strong>
+            <iframe id="output-frame"></iframe>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <button onclick="runCode()">▶️ Выполнить код</button>
+        <button onclick="showSolution()">💡 Показать решение</button>
+        <button onclick="nextLesson()">Далее →</button>
+    </div>
+
+    <div id="solution" class="hidden">
+        <strong>Решение:</strong>
+        <pre id="solution-code"></pre>
+    </div>
+</div>
+
+<script>
+    // База данных уроков
+    const lessons = [
+        {
+            id: 0, module: 0, title: "1.1 Привет, мир!", desc: "Напишем нашу первую программу.", 
+            code: 'print("Привет, мир!")', 
+            solution: 'print("Ваше_Имя")'
+        },
+        {
+            id: 1, module: 0, title: "1.2 Переменные и типы данных", desc: "Сохраняем данные в переменные.", 
+            code: 'name = "Алексей"\nage = 30\nprint(name, "живет", age, "лет")', 
+            solution: 'name = "Алексей"\nage = 30\nprint(f"{name} живет {age} лет")'
+        },
+        {
+            id: 2, module: 0, title: "1.3 Условные операторы", desc: "Проверяем условия.", 
+            code: 'age = 18\nif age >= 18:\n    print("Доступ разрешен")\nelse:\n    print("Доступ запрещен")', 
+            solution: 'age = int(input("Введите ваш возраст: "))\nif age >= 18:\n    print("Доступ разрешен")\nelse:\n    print("Доступ запрещен")'
+        },
+        {
+            id: 3, module: 1, title: "2.1 Списки (Lists)", desc: "Работаем с наборами данных.", 
+            code: 'fruits = ["яблоко", "банан", "груша"]\nprint(fruits[0])', 
+            solution: 'fruits = ["яблоко", "банан", "груша"]\nfor fruit in fruits:\n    print(fruit)'
+        },
+        {
+            id: 4, module: 1, title: "2.2 Циклы (for/while)", desc: "Автоматизируем повторения.", 
+            code: 'for i in range(5):\n    print(i)', 
+            solution: 'count = 0\nwhile count < 5:\n    print("Итерация", count)\n    count += 1'
+        }
+    ];
+
+    let currentLesson = 0;
+
+    function loadLesson(id) {
+        currentLesson = id;
+        const lesson = lessons[id];
+        
+        // Обновляем UI
+        document.getElementById('breadcrumb').textContent = `Модуль ${lesson.module + 1} > ${lesson.title}`;
+        document.getElementById('lesson-title').textContent = lesson.title;
+        document.getElementById('lesson-description').textContent = lesson.desc;
+        document.getElementById('code-editor').value = lesson.code;
+        document.getElementById('solution').classList.add('hidden');
+        
+        // Обновляем активные классы в сайдбаре
+        document.querySelectorAll('.lesson').forEach(el => el.classList.remove('active'));
+        document.querySelector(`.lesson[data-id="${id}"]`).classList.add('active');
+        
+        runCode();
+    }
+
+    function toggleModule(index) {
+        const element = document.getElementById(`lessons-${index}`);
+        const title = document.querySelector(`[onclick="toggleModule(${index})"]`);
+        if (element.classList.contains('hidden')) {
+            element.classList.remove('hidden');
+            title.textContent = '▾ ' + title.textContent.substring(2);
+        } else {
+            element.classList.add('hidden');
+            title.textContent = '▸ ' + title.textContent.substring(2);
+        }
+    }
+
+    function runCode() {
+        const code = document.getElementById('code-editor').value;
+        const iframe = document.getElementById('output-frame');
+        
+        // Формируем HTML для iframe. 
+        // Используем сторонний сервис для эмуляции Python, так как запустить его нативно в браузере в одном файле крайне сложно.
+        const doc = iframe.contentWindow.document;
+        doc.open();
+        doc.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>body{font-family:monospace;padding:10px;background:#1e1e1e;color:#d4d4d4;white-space:pre-wrap;}</style>
+            </head>
+            <body>
+                <div id="result"></div>
+                <script>
+                    const code = \`${code.replace(/`/g, '\\`').replace(/\\$/g, '\\\\$')}\`;
+                    const resultDiv = document.getElementById('result');
+                    
+                    // Простейший эмулятор для функции print
+                    const print = (...args) => {
+                        resultDiv.textContent += args.join(' ') + '\\n';
+                    };
+                    
+                    try {
+                        // Используем Function для выполнения кода в изолированной области
+                        new Function(code)();
+                    } catch(e) {
+                        resultDiv.textContent = 'Ошибка:\\n' + e.message;
+                    }
+                </script>
+            </body>
+            </html>
+        `);
+        doc.close();
+    }
+
+    function showSolution() {
+        const lesson = lessons[currentLesson];
+        document.getElementById('solution-code').textContent = lesson.solution;
+        document.getElementById('solution').classList.remove('hidden');
+    }
+
+    function nextLesson() {
+        if (currentLesson < lessons.length - 1) {
+            loadLesson(currentLesson + 1);
+        } else {
+            alert('🎉 Поздравляем! Вы прошли базовый курс. В реальном проекте здесь был бы переход к проектам и сертификации.');
+        }
+    }
+
+    // Запуск первого урока при загрузке
+    document.addEventListener('DOMContentLoaded', () => loadLesson(0));
+</script>
+
+</body>
+</html>
