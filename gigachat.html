@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GigaCamp | Полный курс по Python</title>
+    <style>
+        :root {
+            --bg-dark: #1e1e1e;
+            --bg-sidebar: #252526;
+            --text-primary: #cccccc;
+            --text-secondary: #9cdcfe;
+            --accent: #4ec9b0;
+            --border: #333333;
+            --code-bg: #2d2d2d;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        header { 
+            background-color: var(--bg-sidebar); 
+            padding: 1rem 2rem; 
+            border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .container { 
+            display: flex; 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 2rem; 
+            gap: 2rem; 
+            min-height: calc(100vh - 80px);
+        }
+        nav { 
+            flex: 0 0 300px; 
+            background-color: var(--bg-sidebar); 
+            border: 1px solid var(--border); 
+            border-radius: 8px; 
+            padding: 1rem; 
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+            align-self: flex-start;
+        }
+        nav h3 { margin-bottom: 1rem; color: var(--accent); }
+        nav ul { list-style: none; }
+        nav li { margin-bottom: 0.5rem; }
+        nav a { 
+            color: var(--text-secondary); 
+            text-decoration: none; 
+            font-size: 0.9rem; 
+            display: block; 
+            padding: 0.3rem;
+            border-radius: 4px;
+        }
+        nav a:hover, nav a.active { 
+            background-color: var(--border); 
+            color: #ffffff; 
+        }
+        main { 
+            flex: 1; 
+            background-color: var(--code-bg); 
+            border: 1px solid var(--border); 
+            border-radius: 8px; 
+            padding: 2rem; 
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+        h1 { color: var(--accent); margin-bottom: 1rem; }
+        h2 { 
+            color: #dcdcaa; 
+            border-bottom: 1px solid var(--border); 
+            padding-bottom: 0.5rem; 
+            margin-top: 2rem; 
+        }
+        .lesson { margin-bottom: 2rem; }
+        .concept { background-color: #262626; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; }
+        .concept h4 { color: #ce9178; margin-bottom: 0.5rem; }
+        pre { 
+            background-color: #1e1e1e; 
+            padding: 1rem; 
+            border-radius: 6px; 
+            overflow-x: auto; 
+            border: 1px solid #333;
+        }
+        code { font-family: 'Consolas', 'Courier New', monospace; color: #d4d4d4; }
+        .console { 
+            background-color: #000000; 
+            color: #33cc33; 
+            padding: 1rem; 
+            border-radius: 6px; 
+            font-family: 'Courier New', monospace; 
+            white-space: pre-wrap;
+            margin-top: 1rem;
+            min-height: 50px;
+        }
+        button { 
+            background-color: var(--accent); 
+            color: #000000; 
+            border: none; 
+            padding: 0.5rem 1rem; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            margin-top: 1rem;
+        }
+        button:hover { opacity: 0.9; }
+        footer { 
+            background-color: var(--bg-sidebar); 
+            text-align: center; 
+            padding: 1rem; 
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>GigaCamp — Полный курс Python</h1>
+</header>
+
+<div class="container">
+    <nav>
+        <h3>Навигация по курсу</h3>
+        <ul>
+            <li><a href="#module-1">1. Начало работы</a></li>
+            <li><a href="#module-2">2. Типы данных</a></li>
+            <li><a href="#module-3">3. Условия и циклы</a></li>
+            <li><a href="#module-4">4. Функции</a></li>
+            <li><a href="#module-5">5. Структуры данных</a></li>
+            <li><a href="#module-6">6. ООП</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="module-1" class="lesson">
+            <h2>1. Начало работы</h2>
+            <div class="concept">
+                <h4>Теория</h4>
+                <p>Python — интерпретируемый язык программирования. Код выполняется строка за строкой. Для запуска кода используется интерпретатор.</p>
+            </div>
+            <pre><code># Это комментарий
+print("Привет, GigaCamp!")</code></pre>
+            <div class="exercise">
+                <h4>Упражнение 1.1</h4>
+                <p>Измените текст в функции print() на "Мой первый код на Python" и нажмите "Выполнить".</p>
+                <textarea id="editor-1" class="editor">print("Мой первый код на Python")</textarea>
+                <button onclick="runCode(1)">Выполнить</button>
+                <div id="console-1" class="console"></div>
+            </div>
+        </section>
+
+        <section id="module-2" class="lesson">
+            <h2>2. Типы данных</h2>
+            <div class="concept">
+                <h4>Теория</h4>
+                <p>Основные типы: int (целые), float (дробные), str (строки), bool (булевы: True/False). Python — язык с динамической типизацией.</p>
+            </div>
+            <pre><code>age = 25
+price = 19.99
+name = "Алексей"
+is_student = True</code></pre>
+            <div class="exercise">
+                <h4>Упражнение 2.1</h4>
+                <p>Создайте переменную с вашим именем (строка) и возрастом (целое число), затем выведите их через запятую.</p>
+                <textarea id="editor-2" class="editor">name = "Иван"
+age = 30
+print(name, age)</textarea>
+                <button onclick="runCode(2)">Выполнить</button>
+                <div id="console-2" class="console"></div>
+            </div>
+        </section>
+
+        <section id="module-3" class="lesson">
+            <h2>3. Условия и циклы</h2>
+            <div class="concept">
+                <h4>Теория</h4>
+                <p>Для ветвления используется if-elif-else. Для повторения действий — циклы for и while. Отступы (4 пробела) определяют блоки кода.</p>
+            </div>
+            <pre><code>for i in range(5):
+    if i % 2 == 0:
+        print(f"{i} - четное")
+    else:
+        print(f"{i} - нечетное")</code></pre>
+            <div class="exercise">
+                <h4>Упражнение 3.1</h4>
+                <p>Напишите цикл, который выведет числа от 1 до 5.</p>
+                <textarea id="editor-3" class="editor">for i in range(1, 6):
+    print(i)</textarea>
+                <button onclick="runCode(3)">Выполнить</button>
+                <div id="console-3" class="console"></div>
+            </div>
+        </section>
+
+        <section id="module-4" class="lesson">
+            <h2>4. Функции</h2>
+            <div class="concept">
+                <h4>Теория</h4>
+                <p>Функции позволяют изолировать логику. Определяются через ключевое слово def. Могут принимать аргументы и возвращать значения.</p>
+            </div>
+            <pre><code>def greet(person):
+    return f"Привет, {person}!"
+
+print(greet("Мир"))</code></pre>
+            <div class="exercise">
+                <h4>Упражнение 4.1</h4>
+                <p>Создайте функцию sum(a, b), которая возвращает сумму двух чисел. Вызовите её с аргументами 10 и 20.</p>
+                <textarea id="editor-4" class="editor">def sum(a, b):
+    return a + b
+
+result = sum(10, 20)
+print(result)</textarea>
+                <button onclick="runCode(4)">Выполнить</button>
+                <div id="console-4" class="console"></div>
+            </div>
+        </section>
+
+        <section id="module-5" class="lesson">
+            <h2>5. Структуры данных</h2>
+            <div class="concept">
+                <h4>Теория</h4>
+                <p>Список (list) — изменяемая последовательность. Кортеж (tuple) — неизменяемая. Словарь (dict) — пары ключ-значение.</p>
+            </div>
+            <pre><code>fruits = ["яблоко", "банан"]
+print(fruits[0]) # яблоко
+
+user = {"name": "Олег", "level": 1}
+print(user["name"]) # Олег</code></pre>
+            <div class="exercise">
+                <h4>Упражнение 5.1</h4>
+                <p>Создайте список из трех городов и выведите второй город из списка.</p>
+                <textarea id="editor-5" class="editor">cities = ["Москва", "Санкт-Петербург", "Казань"]
+print(cities[1])</textarea>
+                <button onclick="runCode(5)">Выполнить</button>
+                <div id="console-5" class="console"></div>
+            </div>
+        </section>
+
+        <section id="module-6" class="lesson">
+            <h2>6. Объектно-ориентированное программирование (ООП)</h2>
+            <div class="concept">
+                <h4>Теория</h4>
+                <p>ООП строится на классах и объектах. Класс — чертеж, объект — конкретная реализация. Основные принципы: инкапсуляция, наследование, полиморфизм.</p>
+            </div>
+            <pre><code>class Dog:
+    def __init__(self, name):
+        self.name = name
+    
+    def bark(self):
+        print(f"{self.name} говорит: Гав!")
+
+rex = Dog("Рекс")
+rex.bark()</code></pre>
+            <div class="exercise">
+                <h4>Упражнение 6.1</h4>
+                <p>Создайте класс Car с методом start(), который выводит "Двигатель заведен". Создайте объект и вызовите метод.</p>
+                <textarea id="editor-6" class="editor">class Car:
+    def start(self):
+        print("Двигатель заведен")
+
+my_car = Car()
+my_car.start()</textarea>
+                <button onclick="runCode(6)">Выполнить</button>
+                <div id="console-6" class="console"></div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<footer>
+    © 2026 GigaCamp. Учебная платформа на базе GigaChat.
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/acorn/8.8.2/acorn.min.js"></script>
+<script>
+// Функция для имитации выполнения Python-кода в браузере
+// ВНИМАНИЕ: Это упрощенная реализация. Для реального выполнения Python в браузере используется Pyodide.
+// Здесь используется трансляция простых конструкций Python в JavaScript для демонстрации.
+
+function runCode(moduleId) {
+    const editor = document.getElementById(`editor-${moduleId}`);
+    const consoleDiv = document.getElementById(`console-${moduleId}`);
+    let code = editor.value;
+    
+    // Очистка консоли
+    consoleDiv.innerHTML = '';
+
+    // Простейший парсинг (эмуляция)
+    try {
+        // Замена print на console.log для JS
+        let jsCode = code.replace(/print$(.+?)$/g, 'console.log($1);');
+        
+        // Замена f-строк (очень упрощенно)
+        jsCode = jsCode.replace(/f"([^"]+)"/g, (_, p1) => {
+            return `"${p1.replace(/\$\{(.+?)\}/g, '" + $1 + "').replace(/\{(.+?)\}/g, '" + $1 + "')}"`;
+        });
+
+        // Выполнение в изолированном контексте
+        const sandbox = {
+            console: {
+                log: (...args) => {
+                    consoleDiv.innerHTML += args.join(' ') + '<br>';
+                }
+            }
+        };
+        
+        // eslint-disable-next-line no-eval
+        const result = new Function('sandbox', `with(sandbox) { ${jsCode} }`)(sandbox);
+        
+    } catch (e) {
+        consoleDiv.innerHTML = '<span style="color: #f48771;">Ошибка:</span> ' + e.message;
+    }
+}
+
+// Плавная прокрутка по навигации
+document.querySelectorAll('nav a').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        this.classList.add('active');
+        
+        const target = document.querySelector(this.getAttribute('href'));
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+});
+</script>
+
+</body>
+</html>
